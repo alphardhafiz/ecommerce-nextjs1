@@ -1,0 +1,19 @@
+FROM node:22.16.0-alpine
+
+WORKDIR /app
+
+# Install dependencies
+COPY package.json package-lock.json* ./
+RUN npm install
+
+# Copy source code
+COPY . .
+
+# Generate Prisma client (optional di dev, bisa disesuaikan)
+RUN npx prisma generate
+
+# Expose port
+EXPOSE 3000
+
+# Jalankan dev server Next.js dengan hot reload
+CMD ["npm", "run", "dev"]

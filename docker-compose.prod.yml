@@ -1,0 +1,15 @@
+version: "3.9"
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile   # pakai Dockerfile production
+    container_name: belanja-web
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/belanja
+    depends_on:
+      - db
+    restart: unless-stopped
+    # tidak pakai volume karena ini production

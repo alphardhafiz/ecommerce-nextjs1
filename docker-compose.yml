@@ -1,0 +1,29 @@
+version: "3.9"
+services:
+  web:
+    build: .
+    container_name: belanja-web
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app                # Mount folder kerja agar perubahan langsung terdeteksi
+      - /app/node_modules     # Agar node_modules tetap di dalam container (tidak di-mount dari host)
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/belanja
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15
+    container_name: belanja-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: belanja
+    ports:
+      - "5432:5432"
+    volumes:
+      - belanja_postgres_data:/var/lib/postgresql/data
+
+volumes:
+  belanja_postgres_data:
