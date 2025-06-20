@@ -12,7 +12,7 @@ const intiialState: ActionResult = {
 
 export default function FormLogout() {
 const [state, formAction] = useFormState(Logout, intiialState)
-    console.log({state})
+
   return (
     <form action={formAction}>
       <button className="flex gap-1 hover:bg-sidebar-accent hovet:text-sidebar-accent-foreground hover:rounded-xl p-2 hover:cursor-pointer w-full">

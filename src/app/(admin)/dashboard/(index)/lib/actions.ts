@@ -9,9 +9,7 @@ export async function Logout(
   _: unknown,
   formData: FormData
 ): Promise<ActionResult> {
-  console.log("logout");
   const { session, user } = await getUser();
-  console.log({ session, user });
 
   if (!session) {
     return {

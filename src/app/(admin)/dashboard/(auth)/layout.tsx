@@ -17,7 +17,6 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const { session, user } = await getUser();
-  console.log({ user });
   if (session && user.role === "superadmin") {
     return redirect("/dashboard");
   }
