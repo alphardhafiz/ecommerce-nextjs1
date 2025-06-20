@@ -1,20 +1,23 @@
-# Pakai image Node versi penuh (bukan alpine) supaya watcher fs stabil
+# Gunakan Node.js versi penuh agar mendukung file watcher dan dependensi native
 FROM node:22
 
-# Set working directory
+# Tentukan direktori kerja di dalam container
 WORKDIR /app
 
-# Copy package.json dan package-lock.json untuk install deps
+# Salin file package.json dan package-lock.json terlebih dahulu untuk caching instalasi
 COPY package*.json ./
 
-# Install dependencies
+# Install semua dependensi
 RUN npm install
 
-# Copy semua source code ke container
+# Salin semua file project (termasuk prisma/schema.prisma)
 COPY . .
 
-# Expose port Next.js default
+# Jalankan Prisma generate (untuk membangun @prisma/client)
+RUN npx prisma generate
+
+# Buka port default Next.js
 EXPOSE 3000
 
-# Jalankan Next.js di mode development supaya hot reload jalan
+# Jalankan server dalam mode development agar hot reload aktif
 CMD ["npm", "run", "dev"]
