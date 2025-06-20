@@ -33,7 +33,7 @@ function SubmitButton() {
 
 export default function FormSignIn() {
   const [state, formAction] = useFormState(SignIn, initialState);
-  
+  console.log('tes commitizen')
   return (
     <Card className="w-full max-w-sm">
       <CardHeader>
