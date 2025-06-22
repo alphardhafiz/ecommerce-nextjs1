@@ -1,8 +1,8 @@
 import React from 'react'
-import FormCategory from '../_components/form-location'
+import FormBrand from './_components/form-brand'
 
 export default function CreatePage() {
   return (
-    <FormCategory />
+    <FormBrand />
   )
 }
