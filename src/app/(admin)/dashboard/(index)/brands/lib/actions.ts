@@ -1,8 +1,10 @@
 "use server";
 
 import { schemaBrand } from "@/lib/schema";
+import { uploadFile } from "@/lib/supabase";
 import { ActionResult } from "@/types";
 import { redirect } from "next/navigation";
+import prisma from "../../../../../../../lib/prisma";
 
 export async function postBrand(
   _: unknown,
@@ -18,8 +20,22 @@ export async function postBrand(
     };
   }
 
-  console.log(formData.get("name"));
-  console.log(formData.get("image"));
+  try {
+    const filename = await uploadFile(validate.data.image, 'brands')
 
+    await prisma.brand.create({
+      data: {
+        name: validate.data.name,
+        logo: filename,
+      }
+    })
+  } catch (error) {
+    console.log(error)
+    return {
+      error: 'Failed to insert data'
+    }
+  }
+
+  
   return redirect("/dashboard/brands");
 }

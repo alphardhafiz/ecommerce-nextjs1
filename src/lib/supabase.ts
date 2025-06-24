@@ -13,3 +13,20 @@ export const getImageUrl = (name: string) => {
 
   return data.publicUrl;
 };
+
+export const uploadFile = async (
+  file: File,
+  path: "brands" | "products" = "brands"
+) => {
+  const fileType = file.type.split("/")[1];
+  const filename = `${path}-${Date.now()}.${fileType}`;
+
+  await supabase.storage
+    .from("belanja")
+    .upload(`public/${path}/${filename}`, file, {
+      cacheControl: "3600",
+      upsert: false,
+    });
+
+  return filename;
+};
