@@ -30,3 +30,14 @@ export const uploadFile = async (
 
   return filename;
 };
+
+export const deleteFile = async (
+  path: "brands" | "products" = "brands",
+  filename: string
+) => {
+
+await supabase
+  .storage
+  .from('belanja')
+  .remove([`public/${path}/${filename}`])
+};
