@@ -1,8 +1,14 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { AlertCircle, ChevronLeft, Upload, X, Image as ImageIcon } from "lucide-react";
+import {
+  AlertCircle,
+  ChevronLeft,
+  Upload,
+  X,
+  Image as ImageIcon,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -17,8 +23,9 @@ import { ActionResult } from "@/types";
 import { useFormState, useFormStatus } from "react-dom";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Brand } from "@prisma/client";
-import { postBrand } from "../../lib/actions";
+import { postBrand, updateBrand } from "../lib/actions";
 import Image from "next/image";
+import { getImageUrl } from "@/lib/supabase";
 
 const initialState: ActionResult = {
   error: "",
@@ -39,11 +46,24 @@ function SubmitButton() {
   );
 }
 
-function FileUpload({ onFileSelect }: { onFileSelect: (file: File | null) => void }) {
+function FileUpload({
+  onFileSelect,
+  initialPreview = null,
+  initialFileName = null,
+}: {
+  onFileSelect: (file: File | null) => void;
+  initialPreview?: string | null; // Tambahkan properti ini
+  initialFileName?: string | null;
+}) {
   const [isDragOver, setIsDragOver] = useState(false);
-  const [preview, setPreview] = useState<string | null>(null);
-  const [fileName, setFileName] = useState<string>("");
+  const [preview, setPreview] = useState<string | null>(initialPreview);
+  const [fileName, setFileName] = useState<string>(initialFileName || "");
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    setPreview(initialPreview);
+    setFileName(initialFileName || "");
+  }, [initialPreview, initialFileName]);
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -58,7 +78,7 @@ function FileUpload({ onFileSelect }: { onFileSelect: (file: File | null) => voi
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragOver(false);
-    
+
     const files = e.dataTransfer.files;
     if (files.length > 0) {
       handleFileSelect(files[0]);
@@ -66,7 +86,7 @@ function FileUpload({ onFileSelect }: { onFileSelect: (file: File | null) => voi
   };
 
   const handleFileSelect = (file: File) => {
-    if (file && file.type.startsWith('image/')) {
+    if (file && file.type.startsWith("image/")) {
       const reader = new FileReader();
       reader.onload = (e) => {
         setPreview(e.target?.result as string);
@@ -100,7 +120,7 @@ function FileUpload({ onFileSelect }: { onFileSelect: (file: File | null) => voi
   return (
     <div className="grid gap-3">
       <Label htmlFor="logo">Logo Brand</Label>
-      
+
       {/* Hidden file input */}
       <input
         ref={fileInputRef}
@@ -120,11 +140,12 @@ function FileUpload({ onFileSelect }: { onFileSelect: (file: File | null) => voi
         onClick={handleClick}
         className={`
           relative border-2 border-dashed rounded-lg p-6 transition-all duration-200 cursor-pointer
-          ${isDragOver 
-            ? 'border-blue-500 bg-blue-950/50' 
-            : 'border-gray-600 hover:border-gray-500'
+          ${
+            isDragOver
+              ? "border-blue-500 bg-blue-950/50"
+              : "border-gray-600 hover:border-gray-500"
           }
-          ${preview ? 'bg-gray-900' : 'bg-gray-950'}
+          ${preview ? "bg-gray-900" : "bg-gray-950"}
         `}
       >
         {preview ? (
@@ -133,16 +154,14 @@ function FileUpload({ onFileSelect }: { onFileSelect: (file: File | null) => voi
             <div className="flex items-center gap-4">
               <div className="relative w-36 h-36 rounded-lg overflow-hidden bg-gray-800">
                 <Image
-                src={preview} 
-                alt="Preview" 
-                className="object-cover"
-                fill
+                  src={preview}
+                  alt="Preview"
+                  className="object-cover"
+                  fill
                 />
               </div>
               <div className="flex-1">
-                <p className="text-sm font-medium text-gray-100">
-                  {fileName}
-                </p>
+                <p className="text-sm font-medium text-gray-100">{fileName}</p>
                 <p className="text-xs text-gray-400">
                   Klik untuk mengubah atau drag & drop gambar baru
                 </p>
@@ -171,9 +190,7 @@ function FileUpload({ onFileSelect }: { onFileSelect: (file: File | null) => voi
               <p className="text-sm font-medium text-gray-100">
                 Drag & drop gambar atau klik untuk upload
               </p>
-              <p className="text-xs text-gray-400">
-                PNG, JPG, GIF hingga 10MB
-              </p>
+              <p className="text-xs text-gray-400">PNG, JPG, GIF hingga 10MB</p>
             </div>
           </div>
         )}
@@ -188,9 +205,21 @@ function FileUpload({ onFileSelect }: { onFileSelect: (file: File | null) => voi
   );
 }
 
-export default function FormBrand() {
-  const [state, formAction] = useFormState(postBrand, initialState);
+export default function FormBrand({
+  data = null,
+  type = "ADD",
+}: FormBrandProps) {
+  const updateBrandWithId = (_: unknown, formData: FormData) =>
+    updateBrand(_, formData, data?.id ?? 0);
+
+  const [state, formAction] = useFormState(
+    type === "ADD" ? postBrand : updateBrandWithId,
+    initialState
+  );
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
+  const initialPreview = data?.logo ? getImageUrl(data.logo) : null;
+  const initialFileName = data?.logo ? data.logo : null;
 
   return (
     <form action={formAction}>
@@ -240,10 +269,15 @@ export default function FormBrand() {
                         name="name"
                         placeholder="Masukkan nama brand..."
                         className="w-full"
+                        defaultValue={data?.name}
                       />
                     </div>
-                    
-                    <FileUpload onFileSelect={setSelectedFile} />
+
+                    <FileUpload
+                      onFileSelect={setSelectedFile}
+                      initialPreview={initialPreview}
+                      initialFileName={initialFileName}
+                    />
                   </div>
                 </CardContent>
               </Card>

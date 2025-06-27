@@ -7,7 +7,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Edit, Trash } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-// import FormDelete from "./_components/form-delete";
+import FormDelete from "./_components/form-delete";
 
 export const columns: ColumnDef<Brand>[] = [
   {
@@ -41,7 +41,7 @@ export const columns: ColumnDef<Brand>[] = [
               <Edit className="w-4 h-4 mr-2" /> Edit
             </Link>
           </Button>
-          {/* <FormDelete id={brand.id} /> */}
+          <FormDelete id={brand.id} />
         </div>
       );
     },
