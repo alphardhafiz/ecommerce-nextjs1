@@ -13,8 +13,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
-import { AlertCircle, ChevronLeft, Upload } from "lucide-react";
-import { useFormState, useFormStatus } from "react-dom";
+import { AlertCircle, ChevronLeft } from "lucide-react";
+import { useFormState } from "react-dom";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import Image from "next/image";
@@ -41,6 +41,8 @@ interface FormProductProps {
 const initialFormState: ActionResult = {
   error: "",
 };
+
+
 
 export default function FormProduct({
   children,
