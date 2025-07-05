@@ -28,11 +28,10 @@ export const columns: ColumnDef<TColumn>[] = [
     header: "Name",
     cell: ({ row }) => {
       const product = row.original;
-
       return (
         <div className="inline-flex items-center gap-5">
           <Image
-            src={`${getImageUrl(product.image_url)}`}
+            src={`${getImageUrl(product.image_url, 'products')}`}
             alt="Product"
             width={80}
             height={80}

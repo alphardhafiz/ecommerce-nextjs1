@@ -31,10 +31,7 @@ export default function UploadImages() {
     }
 
     if (e.target.files && e.target.files.length >= 3) {
-      console.log(e.target.files[0])
-      console.log(URL.createObjectURL(e.target.files[0]))
       thumbnailRef.current.src = URL.createObjectURL(e.target.files[0]);
-      console.log(thumbnailRef)
       imageFirstRef.current.src = URL.createObjectURL(e.target.files[1]);
       imageSecondRef.current.src = URL.createObjectURL(e.target.files[2]);
     }

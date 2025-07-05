@@ -42,8 +42,6 @@ const initialFormState: ActionResult = {
   error: "",
 };
 
-
-
 export default function FormProduct({
   children,
   type,
