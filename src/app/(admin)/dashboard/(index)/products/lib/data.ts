@@ -53,3 +53,23 @@ export async function getProducts() {
     return [];
   }
 }
+
+export async function getProductById(id: string){
+  try {
+    const product = await prisma.product.findFirst({
+      where: {
+        id: +id
+      },
+    })
+
+    if(!product){
+      return null;
+    }
+    
+   return product
+  } catch (error) {
+    console.log(error);
+
+    return null;
+  }
+}

@@ -30,7 +30,7 @@ export default async function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <SidebarProvider>
-          <AppSidebar variant="floating" />
+          <AppSidebar variant="sidebar" />
           <SidebarInset>
             <Header />
             <main className="p-4">
@@ -38,7 +38,6 @@ export default async function RootLayout({
             </main>
           </SidebarInset>
         </SidebarProvider>
-        {/* {children} */}
       </body>
     </html>
   );

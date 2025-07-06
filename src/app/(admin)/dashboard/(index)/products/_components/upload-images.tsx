@@ -5,11 +5,18 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { getImageUrl } from "@/lib/supabase";
 import { Upload } from "lucide-react";
 import Image from "next/image";
-import React, { ChangeEvent, useRef } from "react";
+import React, { ChangeEvent, useEffect, useRef } from "react";
 
-export default function UploadImages() {
+interface UploadImagesProps {
+  defaultImages?: string[] | null;
+}
+
+export default function UploadImages({
+  defaultImages = null,
+}: UploadImagesProps) {
   const ref = useRef<HTMLInputElement>(null);
   const thumbnailRef = useRef<HTMLImageElement>(null);
   const imageFirstRef = useRef<HTMLImageElement>(null);
@@ -36,6 +43,20 @@ export default function UploadImages() {
       imageSecondRef.current.src = URL.createObjectURL(e.target.files[2]);
     }
   };
+
+  useEffect(() => {
+    if (defaultImages && defaultImages.length === 3) {
+      if (thumbnailRef.current) {
+        thumbnailRef.current.src = getImageUrl(defaultImages[0], "products");
+      }
+      if (imageFirstRef.current) {
+        imageFirstRef.current.src = getImageUrl(defaultImages[1], "products");
+      }
+      if (imageSecondRef.current) {
+        imageSecondRef.current.src = getImageUrl(defaultImages[2], "products");
+      }
+    }
+  }, [defaultImages]);
 
   return (
     <Card className="overflow-hidden" x-chunk="dashboard-07-chunk-4">

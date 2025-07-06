@@ -116,7 +116,7 @@ export default function FormProduct({
                         type="number"
                         name="price"
                         className="w-full"
-                        defaultValue={Number(data?.price ?? 0)}
+                        defaultValue={Number(data?.price)}
                       />
                     </div>
 
@@ -164,7 +164,7 @@ export default function FormProduct({
                   </div>
                 </CardContent>
               </Card>
-              <UploadImages />
+              <UploadImages defaultImages={data?.images ? data.images : null} />
             </div>
           </div>
           <div className="flex items-center justify-center gap-2 md:hidden">
