@@ -23,7 +23,7 @@ export default async function OrderPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <DataTable columns={columns} data={[]} />
+          <DataTable columns={columns} data={data} />
         </CardContent>
       </Card>
     </div>
