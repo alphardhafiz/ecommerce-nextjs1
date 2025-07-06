@@ -3,10 +3,10 @@
 import { schemaSignIn } from "@/lib/schema";
 import { ActionResult } from "@/types";
 import { redirect } from "next/navigation";
-import prisma from "../../../../../../../lib/prisma";
 import bcrypt from "bcrypt";
 import { lucia } from "@/lib/auth";
 import { cookies } from "next/headers";
+import prisma from "../../../../../lib/prisma";
 
 export async function signIn(
   _: unknown,
@@ -26,7 +26,7 @@ export async function signIn(
   const existingUser = await prisma.user.findFirst({
     where: {
       email: validate.data.email,
-      role: "superadmin",
+      role: "customer",
     },
   });
 
@@ -54,5 +54,5 @@ export async function signIn(
     sessionCookie.attributes
   );
 
-  return redirect("/dashboard");
+  return redirect("/");
 }

@@ -12,7 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useFormState, useFormStatus } from "react-dom";
-import { SignIn } from "../lib/actions";
+import { signIn } from "../lib/actions";
 import { ActionResult } from "@/types";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircleIcon } from "lucide-react";
@@ -32,7 +32,7 @@ function SubmitButton() {
 }
 
 export default function FormSignIn() {
-  const [state, formAction] = useFormState(SignIn, initialState);
+  const [state, formAction] = useFormState(signIn, initialState);
   
   return (
     <Card className="w-full max-w-sm">
