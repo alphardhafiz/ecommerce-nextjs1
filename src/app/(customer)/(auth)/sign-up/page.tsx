@@ -3,7 +3,7 @@
 import { ActionResult } from "@/types";
 import Image from "next/image";
 import { useFormState, useFormStatus } from "react-dom";
-import { signIn } from "../lib/actions";
+import { signUp } from "../lib/actions";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
@@ -21,14 +21,14 @@ function SubmitButton() {
       disabled={pending}
       className="p-[12px_24px] bg-[#0D5CD7] rounded-full text-center font-semibold text-white"
     >
-      {pending ? "Loading..." : "Sign In to My Account"}
+      {pending ? "Loading..." : "Create New Account"}
     </button>
   );
 }
 
-export default function SignInPage() {
+export default function SignUpPage() {
   const [revealPassword, setRevealPassword] = useState(false);
-  const [state, formAction] = useFormState(signIn, initialFormState);
+  const [state, formAction] = useFormState(signUp, initialFormState);
 
   return (
     <div
@@ -50,15 +50,32 @@ export default function SignInPage() {
               className="w-auto h-10"
             />
           </div>
-          <h1 className="font-bold text-2xl leading-[34px]">Sign In</h1>
-
-        {state.error !== "" && (
+          <h1 className="font-bold text-2xl leading-[34px]">Sign Up</h1>
+          {state.error !== "" && (
             <div className="border border-red-300 text-red-500 p-3 rounded">
-                <h4 className="font-semibold">Error</h4>
-                <p className="text-sm">{state.error}</p>
+              <h4 className="font-semibold">Error</h4>
+              <p className="text-sm">{state.error}</p>
             </div>
-        )}
-          
+          )}
+          <div className="flex items-center gap-[10px] rounded-full border border-[#E5E5E5] p-[12px_20px] focus-within:ring-2 focus-within:ring-[#FFC736] transition-all duration-300">
+            <div className="flex shrink-0">
+              <Image
+                src="/assets/icons/profile-circle.svg"
+                alt="icon"
+                width={120}
+                height={40}
+                priority
+                className="w-auto h-5"
+              />
+            </div>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              className="appearance-none outline-none w-full placeholder:text-[#616369] placeholder:font-normal font-semibold text-black"
+              placeholder="Write your complete name"
+            />
+          </div>
           <div className="flex items-center gap-[10px] rounded-full border border-[#E5E5E5] p-[12px_20px] focus-within:ring-2 focus-within:ring-[#FFC736] transition-all duration-300">
             <div className="flex shrink-0">
               <Image
@@ -119,10 +136,10 @@ export default function SignInPage() {
           <div className="flex flex-col gap-3">
             <SubmitButton />
             <Link
-              href="/sign-up"
+              href="/sign-in"
               className="p-[12px_24px] bg-white rounded-full text-center font-semibold border border-[#E5E5E5]"
             >
-              Sign Up
+              Sign In
             </Link>
           </div>
         </form>

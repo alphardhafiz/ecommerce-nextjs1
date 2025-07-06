@@ -1,6 +1,6 @@
 "use server";
 
-import { schemaSignIn } from "@/lib/schema";
+import { schemaSignIn, schemaSignUp } from "@/lib/schema";
 import { ActionResult } from "@/types";
 import { redirect } from "next/navigation";
 import bcrypt from "bcrypt";
@@ -12,20 +12,20 @@ export async function signIn(
   _: unknown,
   formData: FormData
 ): Promise<ActionResult> {
-  const validate = schemaSignIn.safeParse({
+  const parse = schemaSignIn.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
   });
 
-  if (!validate.success) {
+  if (!parse.success) {
     return {
-      error: validate.error.errors[0].message,
+      error: parse.error.errors[0].message,
     };
   }
 
   const existingUser = await prisma.user.findFirst({
     where: {
-      email: validate.data.email,
+      email: parse.data.email,
       role: "customer",
     },
   });
@@ -37,7 +37,7 @@ export async function signIn(
   }
 
   const comparePassword = bcrypt.compareSync(
-    validate.data.password,
+    parse.data.password,
     existingUser.password
   );
   if (!comparePassword) {
@@ -55,4 +55,42 @@ export async function signIn(
   );
 
   return redirect("/");
+}
+
+export async function signUp(
+  _: unknown,
+  formData: FormData
+): Promise<ActionResult> {
+  const parse = schemaSignUp.safeParse({
+    name: formData.get("name"),
+    email: formData.get("email"),
+    password: formData.get("password"),
+  });
+
+  if (!parse.success) {
+    return {
+      error: parse.error.errors[0].message,
+    };
+  }
+
+  const hashedPassword = bcrypt.hashSync(parse.data.password, 12);
+
+  try {
+    await prisma.user.create({
+      data: {
+        email: parse.data.email,
+        name: parse.data.name,
+        password: hashedPassword,
+        role: "customer",
+      },
+    });
+  } catch (error) {
+    console.log(error);
+
+    return {
+      error: "Failed to sign up",
+    };
+  }
+
+  return redirect("/sign-in");
 }
