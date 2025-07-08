@@ -28,6 +28,7 @@ model User {
 
   orders Order[]
   sessions Session[]
+  passwordResetTokens PasswordResetToken[]
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
@@ -38,6 +39,14 @@ model Session {
   userId    Int
   expiresAt DateTime
   user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)
+}
+
+model PasswordResetToken {
+  id String @id @unique
+  userId Int
+  expiresAt DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Brand {

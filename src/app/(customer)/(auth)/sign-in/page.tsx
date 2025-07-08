@@ -3,10 +3,10 @@
 import { ActionResult } from "@/types";
 import Image from "next/image";
 import { useFormState, useFormStatus } from "react-dom";
-import { signIn } from "../lib/actions";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
+import { signIn } from "../lib/actions";
 
 const initialFormState: ActionResult = {
   error: "",
@@ -109,12 +109,12 @@ export default function SignInPage() {
                 )}
               </button>
             </div>
-            {/* <a
-              href=""
+            <Link
+              href="/forgot-password"
               className="text-sm text-[#616369] underline w-fit mr-0 ml-auto"
             >
               Forgot Password
-            </a> */}
+            </Link>
           </div>
           <div className="flex flex-col gap-3">
             <SubmitButton />
