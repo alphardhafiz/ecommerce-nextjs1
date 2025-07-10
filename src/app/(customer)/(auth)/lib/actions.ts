@@ -1,6 +1,11 @@
 "use server";
 
-import { schemaForgotPassword, schemaResetPassword, schemaSignIn, schemaSignUp } from "@/lib/schema";
+import {
+  schemaForgotPassword,
+  schemaResetPassword,
+  schemaSignIn,
+  schemaSignUp,
+} from "@/lib/schema";
 import { ActionResult } from "@/types";
 import { redirect } from "next/navigation";
 import bcrypt from "bcrypt";
@@ -23,13 +28,13 @@ async function sendPasswordResetEmail(
       to: toEmail,
       subject: "Reset your password",
       html: `
-      <div style="font-family: Arial, sans-serif; line-height: 1.6;">
+       <div style="font-family: Arial, sans-serif; line-height: 1.6;">
           <h2>Permintaan Reset Kata Sandi</h2>
           <p>Halo ${userName},</p>
           <p>Kami menerima permintaan untuk mereset kata sandi Anda. Silakan klik tautan di bawah ini untuk melanjutkan:</p>
           <p>
             <a href="${resetLink}" style="display: inline-block; padding: 10px 20px; background-color: #0D5CD7; color: white; text-decoration: none; border-radius: 5px;">
-              "${resetLink}"
+              Reset Kata Sandi Anda
             </a>
           </p>
           <p>Tautan ini akan kedaluwarsa dalam 1 jam.</p>
@@ -258,13 +263,12 @@ export async function resetPassword(
         where: { id: token },
       });
     });
-
-    return redirect('/sign-in')
   } catch (err: any) {
     console.error("Error resetting password:", err);
-    console.log(err.message)
+    console.log(err.message);
     return {
       error: err.message || "Reset password is failed. Please try again",
     };
   }
+  return redirect("/sign-in");
 }
