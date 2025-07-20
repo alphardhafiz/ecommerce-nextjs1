@@ -5,6 +5,7 @@ export const ALLOW_MIME_TYPES = [
   "image/jpeg",
   "image/png",
   "image/webp",
+  "images/jfif",
 ];
 
 export const schemaSignIn = z.object({
@@ -81,18 +82,22 @@ export const schemaProductEdit = schemaProduct
     images: true,
   });
 
-  export const schemaForgotPassword = z.object({
-    email: z
-      .string({ required_error: "Email is required"})
-      .email({ message: "Invalid email format"})
-  })
+export const schemaForgotPassword = z.object({
+  email: z
+    .string({ required_error: "Email is required" })
+    .email({ message: "Invalid email format" }),
+});
 
-  export const schemaResetPassword = z.object({
+export const schemaResetPassword = z
+  .object({
     password: z
       .string({ required_error: "Password is required" })
       .min(5, { message: "Password must be at least 5 characters long" }),
-    confirmPassword: z.string({ required_error: "Confirm Password is required" })
-  }).refine((data) => data.password === data.confirmPassword, {
+    confirmPassword: z.string({
+      required_error: "Confirm Password is required",
+    }),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
     path: ["confirmPassword"],
-  })
+  });
