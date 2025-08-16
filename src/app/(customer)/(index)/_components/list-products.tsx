@@ -3,10 +3,11 @@ import { getProducts } from "../lib/data";
 import Link from "next/link";
 import Image from "next/image";
 import { rupiahFormat } from "@/lib/utils";
+import CardProduct from "./card-product";
 
 interface ListProductsProps {
   title: ReactNode;
-  type: 'best-selling' | 'latest'
+  type: "best-selling" | "latest";
 }
 
 export default async function ListProducs({ title, type }: ListProductsProps) {
@@ -25,33 +26,16 @@ export default async function ListProducs({ title, type }: ListProductsProps) {
       </div>
       <div className="grid grid-cols-5 gap-[30px]">
         {products.map((item) => (
-          <Link
+          <CardProduct
             key={`${item.name + item.id}`}
-            href="#"
-            className="product-card"
-          >
-            <div className="bg-white flex flex-col gap-[24px] p-5 rounded-[20px] ring-1 ring-[#E5E5E5] hover:ring-2 hover:ring-[#FFC736] transition-all duration-300 w-full">
-              <div className="relative w-full h-[90px] flex shrink-0 items-center justify-center overflow-hidden">
-                <Image
-                  src={item.image_url}
-                  fill
-                  className="object-contain"
-                  alt={item.name}
-                />
-              </div>
-              <div className="flex flex-col gap-[10px]">
-                <div className="flex flex-col gap-1">
-                  <p className="font-semibold leading-[22px]">
-                    {item.name}
-                  </p>
-                  <p className="text-sm text-[#616369]">{item.category.name}</p>
-                </div>
-                <p className="font-semibold text-[#0D5CD7] leading-[22px]">
-                  {rupiahFormat(Number(item.price))}
-                </p>
-              </div>
-            </div>
-          </Link>
+            item={{
+              category_name: item.category.name,
+              id: item.id,
+              image_url: item.image_url,
+              name: item.name,
+              price: Number(item.price),
+            }}
+          />
         ))}
       </div>
     </div>
