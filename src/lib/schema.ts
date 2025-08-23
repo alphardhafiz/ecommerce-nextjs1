@@ -36,7 +36,7 @@ export const schemaBrand = schemaCategory.extend({
     // .any()
     .instanceof(File, { message: "Image is required" })
     .refine((file) => ALLOW_MIME_TYPES.includes(file.type), {
-      message: "Only .jpg, .png, .webp formats are supported",
+      message: "Only .jpg, .jpeg, .jfif, .png, .webp formats are supported",
     })
     .refine((file) => file?.name, { message: "Image is required" }),
 });
