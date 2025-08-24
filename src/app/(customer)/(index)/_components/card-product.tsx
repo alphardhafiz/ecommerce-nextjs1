@@ -1,16 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
 import { rupiahFormat } from "@/lib/utils";
+import { TProduct } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-type TProduct = {
-  id: number;
-  image_url: string;
-  name: string;
-  category_name: string;
-  price: number;
-};
+
 
 interface CardProductProps {
   item: TProduct;

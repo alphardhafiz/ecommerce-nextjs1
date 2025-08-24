@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
+import FilterCheckboxItem from "./filter-checkbox-item";
+import { useFilter } from "@/hooks/useFilter";
 
 export default function FilterStock() {
   return (
     <div className="flex flex-col gap-[14px]">
       <p className="font-semibold leading-[22px]">Stocks</p>
-      <label className="font-semibold flex items-center gap-3">
+      {/* <label className="font-semibold flex items-center gap-3">
         <input
           type="checkbox"
           name="stock"
@@ -19,7 +21,9 @@ export default function FilterStock() {
           className="w-6 h-6 flex shrink-0 appearance-none checked:border-[3px] checked:border-solid checked:border-white rounded-md checked:bg-[#0D5CD7] ring-1 ring-[#0D5CD7]"
         />
         <span>Ready Stock</span>
-      </label>
+      </label> */}
+      <FilterCheckboxItem id={"ready"} value="Ready" type="stock" />
+      <FilterCheckboxItem id={"preorder"} value="Pre-order" type="stock" />
     </div>
   );
 }

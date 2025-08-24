@@ -16,7 +16,7 @@ export default function FilterPrice() {
         })
       }, 1500);
       return () => clearTimeout(debounceInput);
-    }, [minPrice]);
+    }, [minPrice, setFilter]);
 
       useEffect(() => {
         const debounceInput = setTimeout(() => {
@@ -26,12 +26,8 @@ export default function FilterPrice() {
 
         }, 1500);
         return () => clearTimeout(debounceInput);
-      }, [maxPrice]);
+      }, [maxPrice, setFilter]);
 
-      useEffect(() => {
-        console.log("filter", filter);
-      }, [filter])
-  
   return (
     <div className="flex flex-col gap-[14px]">
       <p className="font-semibold leading-[22px]">Range Harga</p>

@@ -1,20 +1,38 @@
+"use client";
+
 /* eslint-disable @next/next/no-img-element */
 import React from "react";
 import CardProduct from "../../_components/card-product";
+import { useQuery } from "@tanstack/react-query";
+import { fetchProduct } from "../lib/data";
+import { useFilter } from "@/hooks/useFilter";
 
 export default function ProductListing() {
+  const {filter} = useFilter()
+  
+  
+  const {data, isLoading} = useQuery({
+    queryKey: ['product-listing', filter],
+    queryFn: () => fetchProduct(filter)
+  })
+
+  if(isLoading){
+    return (
+    <div className="grid grid-cols-1 gap-[30px]">
+      <span>Loading...</span>
+    </div>
+
+    )
+  }
+  
   return (
     <div className="grid grid-cols-3 gap-[30px]">
-      <CardProduct
-        item={{
-          category_name: "Desktops",
-          id: 1,
-          image_url:
-            "assets/thumbnails/color_back_green__buxxfjccqjzm_large_2x-Photoroom 1.png",
-          name: "iMac Green Energy",
-          price: 24000000,
-        }}
+     {data?.map((product) => (
+       <CardProduct
+       key={product.id}
+        item={product}
       />
+     ))}
     </div>
   );
 }

@@ -16,7 +16,7 @@ export default function SearchBar() {
     }, 1500);
 
     return () => clearTimeout(debounceInput);
-  }, [query]);
+  }, [query, setFilter]);
 
   return (
     <div

@@ -9,3 +9,11 @@ export type Tparams = {
 export type TEdit = {
   params: Tparams
 }
+
+export type TProduct = {
+  id: number;
+  image_url: string;
+  name: string;
+  category_name: string;
+  price: number;
+};

@@ -127,7 +127,7 @@ export async function signUp(
       },
     });
   } catch (error) {
-    console.log(error);
+    console.log("[SignUp]", error);
 
     return {
       error: "Failed to sign up",
@@ -265,7 +265,6 @@ export async function resetPassword(
     });
   } catch (err: any) {
     console.error("Error resetting password:", err);
-    console.log(err.message);
     return {
       error: err.message || "Reset password is failed. Please try again",
     };
