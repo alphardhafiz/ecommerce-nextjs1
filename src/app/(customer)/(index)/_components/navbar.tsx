@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { getUser } from "@/lib/auth";
 import Link from "next/link";
 import React from "react";
