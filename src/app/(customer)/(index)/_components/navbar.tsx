@@ -26,7 +26,7 @@ export default async function Navbar() {
         </li>
       </ul>
       <div className="flex items-center gap-3">
-        <Link href="cart.html">
+        <Link href="/carts">
           <div className="w-12 h-12 flex shrink-0">
             <img src="/assets/icons/cart.svg" alt="icon" />
           </div>
@@ -36,7 +36,7 @@ export default async function Navbar() {
             <p className="text-white">Hi, {user.name}</p>
             <div className="w-[48px] h-[48px] flex shrink-0 rounded-full p-1 border border-[#E5E5E5] overflow-hidden">
               <img
-                src="assets/photos/p4.png"
+                src="/assets/photos/p4.png"
                 className="w-full h-full object-cover rounded-full"
                 alt="photo"
               />
