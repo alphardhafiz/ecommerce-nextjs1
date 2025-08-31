@@ -101,3 +101,12 @@ export const schemaResetPassword = z
     message: "Passwords do not match",
     path: ["confirmPassword"],
   });
+
+export const schemaShippingAddress = z.object({
+  name: z.string({ required_error: "Name is required" }),
+  address: z.string({ required_error: "Address is required" }),
+  city: z.string({ required_error: "City is required" }),
+  postal_code: z.string({ required_error: "Postal code is required" }),
+  notes: z.string().nullable(),
+  phone: z.string({ required_error: "phone is required" }),
+});

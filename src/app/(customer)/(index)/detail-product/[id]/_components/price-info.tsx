@@ -25,7 +25,7 @@ export default function PriceInfo({ item, isLogin }: PriceInfoProps) {
 
     addProduct(newCart);
 
-    router.push('/cart')
+    router.push('/carts')
   };
 
   return (
