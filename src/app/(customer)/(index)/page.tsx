@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import React, { Suspense } from "react";
 import Navbar from "./_components/navbar";
 import ListCategory from "./_components/list-category";
