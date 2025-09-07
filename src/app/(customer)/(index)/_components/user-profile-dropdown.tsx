@@ -2,7 +2,7 @@
 "use client";
 import { User } from "lucia";
 import React, { useState, useRef, useEffect } from "react";
-import { useFormState } from "react-dom";
+import { useFormState, useFormStatus } from "react-dom";
 import { Logout } from "../lib/actions";
 import { ActionResult } from "@/types";
 
@@ -12,6 +12,20 @@ const initialState: ActionResult = {
 
 interface UserProfileDropdownProps {
   user: User;
+}
+
+function SubmitButton() {
+  const { pending } = useFormStatus(); // di sini kamu bisa tahu loading atau tidak
+
+  return (
+    <button
+      type="submit"
+      disabled={pending}
+      className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors duration-200"
+    >
+      {pending ? "Logging out..." : "Logout"}
+    </button>
+  );
 }
 
 export default function UserProfileDropdown({
@@ -61,12 +75,7 @@ export default function UserProfileDropdown({
         {isDropdownOpen && (
           <div className="absolute right-0 top-full mt-2 w-32 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
             <form action={formAction}>
-              <button
-                type="submit"
-                className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors duration-200"
-              >
-                Logout
-              </button>
+              <SubmitButton />
             </form>
           </div>
         )}
