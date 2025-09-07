@@ -4,14 +4,22 @@ import { getUser } from "@/lib/auth";
 import { schemaShippingAddress } from "@/lib/schema";
 import { ActionResult, TCart } from "@/types";
 import { redirect } from "next/navigation";
+import prisma from "../../../../../../lib/prisma";
+import { generateRandomString } from "@/lib/utils";
+import {
+  PaymentRequest,
+  PaymentRequestParameters,
+} from "xendit-node/payment_request/models";
+import xenditClient from "@/lib/xendit";
+import { Prisma } from "@prisma/client";
 
 export async function storeOrder(
   _: unknown,
   formData: FormData,
   total: number,
-  product: TCart[]
+  products: TCart[]
 ): Promise<ActionResult> {
-  const { session } = await getUser();
+  const { session, user } = await getUser();
 
   if (!session) {
     return redirect("/");
@@ -32,5 +40,76 @@ export async function storeOrder(
     };
   }
 
-  return redirect("/");
+  let redirectPaymentUrl = "/";
+
+  try {
+    const order = await prisma.order.create({
+      data: {
+        total: total,
+        status: "pending",
+        user_id: user.id,
+        code: generateRandomString(15),
+      },
+    });
+
+    const data: PaymentRequestParameters = {
+      amount: total,
+      paymentMethod: {
+        ewallet: {
+          channelProperties: {
+            successReturnUrl: process.env.NEXT_PUBLIC_REDIRECT_URL,
+          },
+          channelCode: "SHOPEEPAY",
+        },
+        reusability: "ONE_TIME_USE",
+        type: "EWALLET",
+      },
+      currency: "IDR",
+      referenceId: order.code,
+    };
+
+    const response: PaymentRequest =
+      await xenditClient.PaymentRequest.createPaymentRequest({
+        data,
+      });
+
+    redirectPaymentUrl =
+      response.actions?.find((val) => val.urlType === "DEEPLINK")?.url || "/";
+
+    const queryCreateProductOrder: Prisma.OrderProductCreateManyInput[] = []
+
+    for(const product of products) {
+      queryCreateProductOrder.push({
+        order_id: order.id,
+        product_id: product.id,
+        subtotal: product.price * product.quantity,
+        quantity: product.quantity,
+      })
+    }
+
+    await prisma.orderProduct.createMany({
+      data: queryCreateProductOrder
+    })
+
+    await prisma.orderDetail.create({
+      data: {
+        address: parse.data.address,
+        city: parse.data.city,
+        name: parse.data.name,
+        phone: parse.data.phone,
+        postal_code: parse.data.postal_code,
+        notes: parse.data.notes,
+        order_id: order.id
+      }
+    })
+    
+  } catch (error) {
+    console.log("store order error", error);
+
+    return {
+      error: "Failed to checkout",
+    };
+  }
+
+  return redirect(redirectPaymentUrl);
 }
