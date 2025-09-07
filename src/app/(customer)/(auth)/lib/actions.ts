@@ -8,7 +8,7 @@ import {
 } from "@/lib/schema";
 import { ActionResult } from "@/types";
 import { redirect } from "next/navigation";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { lucia } from "@/lib/auth";
 import { cookies } from "next/headers";
 import prisma from "../../../../../lib/prisma";
