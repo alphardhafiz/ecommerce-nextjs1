@@ -14,7 +14,7 @@ export async function getOrders() {
             },
         }
     })
-
+    
     const response: TColumn[] = orders.map((order) => {
         return {
             id: order.id,
@@ -23,7 +23,7 @@ export async function getOrders() {
             product: order.products.map((product) => {
                 return {
                     name: product.product.name,
-                    image: getImageUrl(product.product.images[0])
+                    image: getImageUrl(product.product.images[0], 'products')
                 }
             }),
             status: order.status
